@@ -3,6 +3,8 @@ from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
 
+from .models import Patient, Doctor, Procedure, ProcedureCategory
+
 
 class ContactDetailsViewTests(TestCase):
 	"""Test coverage for the contact details page workflow."""
@@ -94,3 +96,75 @@ class AboutUsViewTests(TestCase):
 		response = self.client.get(reverse('about_us'))
 
 		assert response.status_code == 302
+
+
+class DashboardViewTests(TestCase):
+	"""Test coverage for the dashboard page, including the procedures quick-register section."""
+
+	def setUp(self):
+		"""Create and authenticate a user, and set up sample procedures."""
+		self.user = get_user_model().objects.create_user(
+			username='dash-user',
+			password='test-pass-123',
+		)
+		self.client.force_login(self.user)
+
+		self.category = ProcedureCategory.objects.create(name='Cardiology')
+		self.active_procedure = Procedure.objects.create(
+			name='ECG Test',
+			category=self.category,
+			estimated_duration_minutes=30,
+			base_cost='150.00',
+			is_active=True,
+		)
+		self.inactive_procedure = Procedure.objects.create(
+			name='Inactive Scan',
+			category=self.category,
+			estimated_duration_minutes=60,
+			base_cost='300.00',
+			is_active=False,
+		)
+
+	def test_dashboard_renders_for_authenticated_user(self):
+		"""The dashboard should be accessible to logged-in users."""
+		response = self.client.get(reverse('dashboard'))
+
+		assert response.status_code == 200
+
+	def test_dashboard_requires_login(self):
+		"""Anonymous users should be redirected to login."""
+		self.client.logout()
+
+		response = self.client.get(reverse('dashboard'))
+
+		assert response.status_code == 302
+
+	def test_dashboard_context_contains_active_procedures(self):
+		"""The dashboard context must include only active procedures."""
+		response = self.client.get(reverse('dashboard'))
+
+		assert 'active_procedures' in response.context
+		procedures_in_context = list(response.context['active_procedures'])
+		assert self.active_procedure in procedures_in_context
+		assert self.inactive_procedure not in procedures_in_context
+
+	def test_dashboard_shows_procedure_names(self):
+		"""Active procedure names should appear in the rendered dashboard HTML."""
+		response = self.client.get(reverse('dashboard'))
+
+		assert b'ECG Test' in response.content
+		assert b'Inactive Scan' not in response.content
+
+	def test_dashboard_shows_register_patient_button_for_each_procedure(self):
+		"""Each active procedure row should contain a Register Patient quick-action link."""
+		response = self.client.get(reverse('dashboard'))
+
+		assert b'Register Patient' in response.content
+		register_url = reverse('patient_create').encode()
+		assert register_url in response.content
+
+	def test_dashboard_procedure_count_matches_active_only(self):
+		"""The procedure_count stat on the dashboard should count only active procedures."""
+		response = self.client.get(reverse('dashboard'))
+
+		assert response.context['procedure_count'] == 1
