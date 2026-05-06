@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Contact Details - HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Contact Details</h2>
+    <p class="subtitle">Use the directory for urgent reach-outs, or send a tracked request to the operations team below.</p>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <section class="detail-card">
+    <h3>Main Office</h3>
+    <dl class="contact-list">
+      <div class="contact-row">
+        <dt>Phone</dt>
+        <dd><a href="tel:+911124567890">+91 11 2456 7890</a></dd>
+      </div>
+      <div class="contact-row">
+        <dt>Email</dt>
+        <dd><a href="mailto:support@healthcarecrm.local">support@healthcarecrm.local</a></dd>
+      </div>
+      <div class="contact-row">
+        <dt>Address</dt>
+        <dd>2nd Floor, Care Point Plaza, Sector 18, Noida</dd>
+      </div>
+      <div class="contact-row">
+        <dt>Hours</dt>
+        <dd>Monday to Saturday, 8:00 AM to 8:00 PM</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="detail-card">
+    <h3>Department Contacts</h3>
+    <dl class="contact-list">
+      <div class="contact-row">
+        <dt>Appointments</dt>
+        <dd><a href="tel:+911124567891">+91 11 2456 7891</a></dd>
+      </div>
+      <div class="contact-row">
+        <dt>Patient Records</dt>
+        <dd><a href="tel:+911124567892">+91 11 2456 7892</a></dd>
+      </div>
+      <div class="contact-row">
+        <dt>Emergency Desk</dt>
+        <dd><a href="tel:+911124567899">+91 11 2456 7899</a></dd>
+      </div>
+      <div class="contact-row">
+        <dt>Billing</dt>
+        <dd><a href="mailto:billing@healthcarecrm.local">billing@healthcarecrm.local</a></dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="detail-card contact-form-card">
+    <h3>Send a Request</h3>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.inquiry_type.id_for_label }}">Inquiry Type</label>
+          {{ form.inquiry_type }}
+          {% for error in form.inquiry_type.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.subject.id_for_label }}">Subject</label>
+          {{ form.subject }}
+          {% for error in form.subject.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.name.id_for_label }}">Name</label>
+          {{ form.name }}
+          {% for error in form.name.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">Email</label>
+          {{ form.email }}
+          {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.message.id_for_label }}">Message</label>
+        {{ form.message }}
+        {% for error in form.message.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      {% endif %}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}

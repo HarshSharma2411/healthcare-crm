@@ -17,6 +17,8 @@
     </div>
     <ul class="nav-links">
       <li><a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>Dashboard</a></li>
+      <li><a href="{% url 'about_us' %}" {% if request.resolver_match.url_name == 'about_us' %}class="active"{% endif %}>About Us</a></li>
+      <li><a href="{% url 'contact_details' %}" {% if request.resolver_match.url_name == 'contact_details' %}class="active"{% endif %}>Contact Details</a></li>
       <li><a href="{% url 'patient_list' %}" {% if 'patient' in request.resolver_match.url_name %}class="active"{% endif %}>Patients</a></li>
       <li><a href="{% url 'doctor_list' %}" {% if 'doctor' in request.resolver_match.url_name %}class="active"{% endif %}>Doctors</a></li>
       <li><a href="{% url 'procedure_list' %}" {% if 'procedure' in request.resolver_match.url_name %}class="active"{% endif %}>Procedures</a></li>

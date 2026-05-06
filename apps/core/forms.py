@@ -2,6 +2,39 @@ from django import forms
 from .models import Patient, Doctor, Procedure
 
 
+class ContactForm(forms.Form):
+    inquiry_type = forms.ChoiceField(
+        choices=[
+            ('appointments', 'Appointments'),
+            ('records', 'Patient Records'),
+            ('billing', 'Billing'),
+            ('technical', 'Technical Support'),
+            ('other', 'Other'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-input'})
+    )
+    name = forms.CharField(
+        max_length=120,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Your full name'})
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-input', 'placeholder': 'name@example.com'})
+    )
+    subject = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'How can we help?'})
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-input',
+                'rows': 5,
+                'placeholder': 'Share the details your team needs to act on.',
+            }
+        )
+    )
+
+
 class PatientForm(forms.ModelForm):
     date_of_birth = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-input'})

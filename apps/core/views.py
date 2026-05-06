@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .models import Patient, Doctor, Procedure
-from .forms import PatientForm, DoctorForm, ProcedureForm
+from .forms import ContactForm, PatientForm, DoctorForm, ProcedureForm
 
 
 # ── Dashboard ──────────────────────────────────────────────────────────────
 
 @login_required
 def dashboard(request):
+    """Render the dashboard with summary counts and recent activity."""
     context = {
         'patient_count': Patient.objects.count(),
         'doctor_count': Doctor.objects.count(),
@@ -18,6 +19,31 @@ def dashboard(request):
         'recent_doctors': Doctor.objects.select_related('department').order_by('-created_at')[:5],
     }
     return render(request, 'dashboard.html', context)
+
+
+@login_required
+def contact_details(request):
+    """Display contact information and handle support inquiries from staff users."""
+    initial = {
+        'name': request.user.get_full_name() or request.user.get_username(),
+        'email': request.user.email,
+    }
+    form = ContactForm(request.POST or None, initial=initial)
+
+    if request.method == 'POST' and form.is_valid():
+        messages.success(
+            request,
+            f"Your {form.cleaned_data['inquiry_type']} request has been recorded. Our team will contact you shortly.",
+        )
+        return redirect('contact_details')
+
+    return render(request, 'contact_details.html', {'form': form})
+
+
+@login_required
+def about_us(request):
+    """Render the about page describing the CRM mission and operating model."""
+    return render(request, 'about_us.html')
 
 
 # ── Patients ───────────────────────────────────────────────────────────────
