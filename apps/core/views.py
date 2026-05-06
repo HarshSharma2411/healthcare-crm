@@ -10,13 +10,15 @@ from .forms import ContactForm, PatientForm, DoctorForm, ProcedureForm
 
 @login_required
 def dashboard(request):
-    """Render the dashboard with summary counts and recent activity."""
+    """Render the dashboard with summary counts, recent activity, and active procedures."""
+    active_procedures = list(Procedure.objects.select_related('category').filter(is_active=True))
     context = {
         'patient_count': Patient.objects.count(),
         'doctor_count': Doctor.objects.count(),
-        'procedure_count': Procedure.objects.filter(is_active=True).count(),
+        'procedure_count': len(active_procedures),
         'recent_patients': Patient.objects.order_by('-created_at')[:5],
         'recent_doctors': Doctor.objects.select_related('department').order_by('-created_at')[:5],
+        'active_procedures': active_procedures,
     }
     return render(request, 'dashboard.html', context)
 

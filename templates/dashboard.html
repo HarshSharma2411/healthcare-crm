@@ -89,4 +89,35 @@
     {% endif %}
   </div>
 </div>
+
+<div class="dashboard-tables">
+  <div class="table-section">
+    <div class="section-header">
+      <h3>Procedures</h3>
+      <a href="{% url 'procedure_list' %}" class="btn btn-primary btn-sm">View all</a>
+    </div>
+    {% if active_procedures %}
+    <table class="table">
+      <thead>
+        <tr><th>Procedure</th><th>Category</th><th>Duration (min)</th><th>Base Cost</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for proc in active_procedures %}
+        <tr>
+          <td>{{ proc.name }}</td>
+          <td>{{ proc.category|default:"—" }}</td>
+          <td>{{ proc.estimated_duration_minutes }}</td>
+          <td>${{ proc.base_cost }}</td>
+          <td>
+            <a href="{% url 'patient_create' %}?procedure={{ proc.id }}" class="btn btn-primary btn-sm">+ Register Patient</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-msg">No active procedures. <a href="{% url 'procedure_create' %}">Add one</a>.</p>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
