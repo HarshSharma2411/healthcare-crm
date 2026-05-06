@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Doctors — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Doctors</h2>
+  <a href="{% url 'doctor_create' %}" class="btn btn-primary">+ Add Doctor</a>
+</div>
+
+<form method="get" class="search-bar">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search by name, specialization, or license…" class="form-input search-input" />
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if query %}<a href="{% url 'doctor_list' %}" class="btn btn-ghost">Clear</a>{% endif %}
+</form>
+
+{% if doctors %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th><th>Name</th><th>Specialization</th><th>Department</th>
+      <th>License No.</th><th>Phone</th><th>Email</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for d in doctors %}
+    <tr>
+      <td>{{ d.pk }}</td>
+      <td><a href="{% url 'doctor_detail' d.pk %}" class="table-link">{{ d.full_name }}</a></td>
+      <td>{{ d.specialization }}</td>
+      <td>{{ d.department|default:"—" }}</td>
+      <td>{{ d.license_number }}</td>
+      <td>{{ d.phone }}</td>
+      <td>{{ d.email }}</td>
+      <td class="actions">
+        <a href="{% url 'doctor_edit' d.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{% url 'doctor_delete' d.pk %}" class="btn btn-sm btn-danger">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>{% if query %}No doctors found for "{{ query }}".{% else %}No doctors added yet.{% endif %}</p>
+  {% if not query %}<a href="{% url 'doctor_create' %}" class="btn btn-primary">Add First Doctor</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

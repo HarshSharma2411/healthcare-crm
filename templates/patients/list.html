@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Patients — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Patients</h2>
+  <a href="{% url 'patient_create' %}" class="btn btn-primary">+ Add Patient</a>
+</div>
+
+<form method="get" class="search-bar">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search by name, phone, or email…" class="form-input search-input" />
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if query %}<a href="{% url 'patient_list' %}" class="btn btn-ghost">Clear</a>{% endif %}
+</form>
+
+{% if patients %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th><th>Name</th><th>DOB</th><th>Gender</th>
+      <th>Blood Group</th><th>Phone</th><th>Email</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in patients %}
+    <tr>
+      <td>{{ p.pk }}</td>
+      <td><a href="{% url 'patient_detail' p.pk %}" class="table-link">{{ p.full_name }}</a></td>
+      <td>{{ p.date_of_birth }}</td>
+      <td>{{ p.get_gender_display }}</td>
+      <td><span class="badge badge-blue">{{ p.blood_group }}</span></td>
+      <td>{{ p.phone }}</td>
+      <td>{{ p.email|default:"—" }}</td>
+      <td class="actions">
+        <a href="{% url 'patient_edit' p.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{% url 'patient_delete' p.pk %}" class="btn btn-sm btn-danger">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>{% if query %}No patients found for "{{ query }}".{% else %}No patients added yet.{% endif %}</p>
+  {% if not query %}<a href="{% url 'patient_create' %}" class="btn btn-primary">Add First Patient</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

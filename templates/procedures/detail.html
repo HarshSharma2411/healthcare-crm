@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}{{ procedure.name }} — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{% url 'procedure_list' %}" class="breadcrumb">&larr; Procedures</a>
+    <h2>{{ procedure.name }}</h2>
+    {% if procedure.category %}<p class="subtitle">{{ procedure.category }}</p>{% endif %}
+  </div>
+  <div class="header-actions">
+    <a href="{% url 'procedure_edit' procedure.pk %}" class="btn btn-secondary">Edit</a>
+    <a href="{% url 'procedure_delete' procedure.pk %}" class="btn btn-danger">Delete</a>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-card">
+    <h3>Procedure Details</h3>
+    <dl class="detail-list">
+      <dt>Name</dt><dd>{{ procedure.name }}</dd>
+      <dt>Category</dt><dd>{{ procedure.category|default:"—" }}</dd>
+      <dt>Description</dt><dd>{{ procedure.description|default:"—" }}</dd>
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h3>Operational Details</h3>
+    <dl class="detail-list">
+      <dt>Estimated Duration</dt><dd>{{ procedure.estimated_duration_minutes }} minutes</dd>
+      <dt>Base Cost</dt><dd>${{ procedure.base_cost }}</dd>
+      <dt>Status</dt>
+      <dd>
+        {% if procedure.is_active %}
+        <span class="badge badge-green">Active</span>
+        {% else %}
+        <span class="badge badge-gray">Inactive</span>
+        {% endif %}
+      </dd>
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h3>Record Info</h3>
+    <dl class="detail-list">
+      <dt>Procedure ID</dt><dd>#{{ procedure.pk }}</dd>
+      <dt>Added On</dt><dd>{{ procedure.created_at|date:"N j, Y, g:i a" }}</dd>
+    </dl>
+  </div>
+</div>
+{% endblock %}

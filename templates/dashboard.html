@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Dashboard</h2>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-blue">
+    <div class="stat-icon">&#128100;</div>
+    <div class="stat-body">
+      <p class="stat-label">Total Patients</p>
+      <p class="stat-value">{{ patient_count }}</p>
+    </div>
+    <a href="{% url 'patient_list' %}" class="stat-link">View all &rarr;</a>
+  </div>
+
+  <div class="stat-card stat-green">
+    <div class="stat-icon">&#128084;</div>
+    <div class="stat-body">
+      <p class="stat-label">Total Doctors</p>
+      <p class="stat-value">{{ doctor_count }}</p>
+    </div>
+    <a href="{% url 'doctor_list' %}" class="stat-link">View all &rarr;</a>
+  </div>
+
+  <div class="stat-card stat-purple">
+    <div class="stat-icon">&#128203;</div>
+    <div class="stat-body">
+      <p class="stat-label">Active Procedures</p>
+      <p class="stat-value">{{ procedure_count }}</p>
+    </div>
+    <a href="{% url 'procedure_list' %}" class="stat-link">View all &rarr;</a>
+  </div>
+</div>
+
+<div class="dashboard-tables">
+  <div class="table-section">
+    <div class="section-header">
+      <h3>Recent Patients</h3>
+      <a href="{% url 'patient_create' %}" class="btn btn-primary btn-sm">+ Add Patient</a>
+    </div>
+    {% if recent_patients %}
+    <table class="table">
+      <thead>
+        <tr><th>Name</th><th>Gender</th><th>Blood Group</th><th>Phone</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for p in recent_patients %}
+        <tr>
+          <td>{{ p.full_name }}</td>
+          <td>{{ p.get_gender_display }}</td>
+          <td><span class="badge badge-blue">{{ p.blood_group }}</span></td>
+          <td>{{ p.phone }}</td>
+          <td><a href="{% url 'patient_detail' p.pk %}" class="table-link">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-msg">No patients added yet. <a href="{% url 'patient_create' %}">Add one</a>.</p>
+    {% endif %}
+  </div>
+
+  <div class="table-section">
+    <div class="section-header">
+      <h3>Recent Doctors</h3>
+      <a href="{% url 'doctor_create' %}" class="btn btn-primary btn-sm">+ Add Doctor</a>
+    </div>
+    {% if recent_doctors %}
+    <table class="table">
+      <thead>
+        <tr><th>Name</th><th>Specialization</th><th>Department</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for d in recent_doctors %}
+        <tr>
+          <td>{{ d.full_name }}</td>
+          <td>{{ d.specialization }}</td>
+          <td>{{ d.department|default:"—" }}</td>
+          <td><a href="{% url 'doctor_detail' d.pk %}" class="table-link">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-msg">No doctors added yet. <a href="{% url 'doctor_create' %}">Add one</a>.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

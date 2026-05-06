@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{% url 'patient_list' %}" class="breadcrumb">&larr; Patients</a>
+    <h2>{{ title }}</h2>
+  </div>
+</div>
+
+<div class="form-card">
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="form-section">
+      <h3>Personal Information</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.first_name.id_for_label }}">First Name *</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<p class="field-error">{{ form.first_name.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.last_name.id_for_label }}">Last Name *</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<p class="field-error">{{ form.last_name.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth *</label>
+          {{ form.date_of_birth }}
+          {% if form.date_of_birth.errors %}<p class="field-error">{{ form.date_of_birth.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.gender.id_for_label }}">Gender *</label>
+          {{ form.gender }}
+          {% if form.gender.errors %}<p class="field-error">{{ form.gender.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.blood_group.id_for_label }}">Blood Group</label>
+          {{ form.blood_group }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Contact Information</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.phone.id_for_label }}">Phone *</label>
+          {{ form.phone }}
+          {% if form.phone.errors %}<p class="field-error">{{ form.phone.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">Email</label>
+          {{ form.email }}
+          {% if form.email.errors %}<p class="field-error">{{ form.email.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.address.id_for_label }}">Address</label>
+        {{ form.address }}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Emergency Contact</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.emergency_contact_name.id_for_label }}">Contact Name</label>
+          {{ form.emergency_contact_name }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.emergency_contact_phone.id_for_label }}">Contact Phone</label>
+          {{ form.emergency_contact_phone }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Patient</button>
+      <a href="{% if patient %}{% url 'patient_detail' patient.pk %}{% else %}{% url 'patient_list' %}{% endif %}" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ patient.full_name }} — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{% url 'patient_list' %}" class="breadcrumb">&larr; Patients</a>
+    <h2>{{ patient.full_name }}</h2>
+  </div>
+  <div class="header-actions">
+    <a href="{% url 'patient_edit' patient.pk %}" class="btn btn-secondary">Edit</a>
+    <a href="{% url 'patient_delete' patient.pk %}" class="btn btn-danger">Delete</a>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-card">
+    <h3>Personal Information</h3>
+    <dl class="detail-list">
+      <dt>Full Name</dt><dd>{{ patient.full_name }}</dd>
+      <dt>Date of Birth</dt><dd>{{ patient.date_of_birth }}</dd>
+      <dt>Gender</dt><dd>{{ patient.get_gender_display }}</dd>
+      <dt>Blood Group</dt><dd><span class="badge badge-blue">{{ patient.blood_group }}</span></dd>
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h3>Contact Information</h3>
+    <dl class="detail-list">
+      <dt>Phone</dt><dd>{{ patient.phone }}</dd>
+      <dt>Email</dt><dd>{{ patient.email|default:"—" }}</dd>
+      <dt>Address</dt><dd>{{ patient.address|default:"—" }}</dd>
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h3>Emergency Contact</h3>
+    <dl class="detail-list">
+      <dt>Name</dt><dd>{{ patient.emergency_contact_name|default:"—" }}</dd>
+      <dt>Phone</dt><dd>{{ patient.emergency_contact_phone|default:"—" }}</dd>
+    </dl>
+  </div>
+
+  <div class="detail-card">
+    <h3>Record Info</h3>
+    <dl class="detail-list">
+      <dt>Patient ID</dt><dd>#{{ patient.pk }}</dd>
+      <dt>Registered On</dt><dd>{{ patient.created_at|date:"N j, Y, g:i a" }}</dd>
+    </dl>
+  </div>
+</div>
+{% endblock %}

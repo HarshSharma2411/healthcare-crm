@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Procedures — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Procedures</h2>
+  <a href="{% url 'procedure_create' %}" class="btn btn-primary">+ Add Procedure</a>
+</div>
+
+<form method="get" class="search-bar">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search by name, description, or category…" class="form-input search-input" />
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if query %}<a href="{% url 'procedure_list' %}" class="btn btn-ghost">Clear</a>{% endif %}
+</form>
+
+{% if procedures %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th><th>Name</th><th>Category</th><th>Duration (min)</th>
+      <th>Base Cost</th><th>Status</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in procedures %}
+    <tr>
+      <td>{{ p.pk }}</td>
+      <td><a href="{% url 'procedure_detail' p.pk %}" class="table-link">{{ p.name }}</a></td>
+      <td>{{ p.category|default:"—" }}</td>
+      <td>{{ p.estimated_duration_minutes }}</td>
+      <td>${{ p.base_cost }}</td>
+      <td>
+        {% if p.is_active %}
+        <span class="badge badge-green">Active</span>
+        {% else %}
+        <span class="badge badge-gray">Inactive</span>
+        {% endif %}
+      </td>
+      <td class="actions">
+        <a href="{% url 'procedure_edit' p.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{% url 'procedure_delete' p.pk %}" class="btn btn-sm btn-danger">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>{% if query %}No procedures found for "{{ query }}".{% else %}No procedures added yet.{% endif %}</p>
+  {% if not query %}<a href="{% url 'procedure_create' %}" class="btn btn-primary">Add First Procedure</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

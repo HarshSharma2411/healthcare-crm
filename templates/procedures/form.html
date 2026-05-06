@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} — HealthCare CRM{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{% url 'procedure_list' %}" class="breadcrumb">&larr; Procedures</a>
+    <h2>{{ title }}</h2>
+  </div>
+</div>
+
+<div class="form-card">
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="form-section">
+      <h3>Procedure Information</h3>
+      <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">Procedure Name *</label>
+        {{ form.name }}
+        {% if form.name.errors %}<p class="field-error">{{ form.name.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="{{ form.category.id_for_label }}">Category</label>
+          {{ form.category }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.estimated_duration_minutes.id_for_label }}">Duration (minutes) *</label>
+          {{ form.estimated_duration_minutes }}
+          {% if form.estimated_duration_minutes.errors %}<p class="field-error">{{ form.estimated_duration_minutes.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.base_cost.id_for_label }}">Base Cost ($) *</label>
+          {{ form.base_cost }}
+          {% if form.base_cost.errors %}<p class="field-error">{{ form.base_cost.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.description.id_for_label }}">Description</label>
+        {{ form.description }}
+      </div>
+      <div class="form-group form-group-inline">
+        {{ form.is_active }}
+        <label for="{{ form.is_active.id_for_label }}">Mark as Active</label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Procedure</button>
+      <a href="{% if procedure %}{% url 'procedure_detail' procedure.pk %}{% else %}{% url 'procedure_list' %}{% endif %}" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
