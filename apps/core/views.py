@@ -15,7 +15,7 @@ def dashboard(request):
         'doctor_count': Doctor.objects.count(),
         'procedure_count': Procedure.objects.filter(is_active=True).count(),
         'recent_patients': Patient.objects.order_by('-created_at')[:5],
-        'recent_doctors': Doctor.objects.order_by('-created_at')[:5],
+        'recent_doctors': Doctor.objects.select_related('department').order_by('-created_at')[:5],
     }
     return render(request, 'dashboard.html', context)
 
