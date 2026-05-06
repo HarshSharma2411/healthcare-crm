@@ -25,7 +25,7 @@
     <a href="{% url 'doctor_list' %}" class="stat-link">View all &rarr;</a>
   </div>
 
-  <div class="stat-card stat-purple">
+  <div class="stat-card stat-accent">
     <div class="stat-icon">&#128203;</div>
     <div class="stat-body">
       <p class="stat-label">Active Procedures</p>
@@ -51,7 +51,7 @@
         <tr>
           <td>{{ p.full_name }}</td>
           <td>{{ p.get_gender_display }}</td>
-          <td><span class="badge badge-blue">{{ p.blood_group }}</span></td>
+          <td><span class="badge badge-primary">{{ p.blood_group }}</span></td>
           <td>{{ p.phone }}</td>
           <td><a href="{% url 'patient_detail' p.pk %}" class="table-link">View</a></td>
         </tr>

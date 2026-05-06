@@ -28,7 +28,7 @@
       <td><a href="{% url 'patient_detail' p.pk %}" class="table-link">{{ p.full_name }}</a></td>
       <td>{{ p.date_of_birth }}</td>
       <td>{{ p.get_gender_display }}</td>
-      <td><span class="badge badge-blue">{{ p.blood_group }}</span></td>
+      <td><span class="badge badge-primary">{{ p.blood_group }}</span></td>
       <td>{{ p.phone }}</td>
       <td>{{ p.email|default:"—" }}</td>
       <td class="actions">
